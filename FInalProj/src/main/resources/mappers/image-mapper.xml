@@ -3,8 +3,8 @@
 <mapper namespace="com.fin.proj.common.model.dao.ImageDAO">
 
 	<insert id="insertImage">
-		insert into image
-		values(seq_iid.nextval, #{imageUrl}, #{imageName})
+		insert into IMAGE(IMAGE_URL, IMAGE_NAME)
+		values(#{imageUrl}, #{imageName})
 	</insert>
 	
 	<resultMap type="Image" id="imageResultSet">
@@ -15,7 +15,7 @@
 	
 	<select id="findByImageNo" resultMap="imageResultSet">
 		select *
-		from image
+		from IMAGE
 		where image_no = #{imageNo}
 	</select>
 	

@@ -3,7 +3,8 @@
 <mapper namespace="com.fin.proj.support.model.dao.SupportDAO">
 	
 	<insert id="supportApply">
-		insert into support values(SEQ_SUID.NEXTVAL, #{userNo}, #{supportCategory}, #{supportTitle}, #{supportContent}, sysdate, #{startDate}, #{endDate}, #{targetAmount}, 0, default, default, #{imageUrl})
+		insert into SUPPORT(U_NO, S_CATEGORY, S_TITLE, S_CONTENT, S_CREATE_DATE, S_START_DATE, S_END_DATE, TARGET_AMOUNT, FUND_AMOUNT, S_COUNT, S_STATUS, IMAGE_URL)
+		values(#{userNo}, #{supportCategory}, #{supportTitle}, #{supportContent}, default, #{startDate}, #{endDate}, #{targetAmount}, 0, default, default, #{imageUrl})
 	</insert>
 	
 <!-- 	<insert id="insertSupportDetail"> -->
@@ -11,11 +12,11 @@
 <!-- 	</insert> -->
 	
 	<select id="getApplyListUser" resultType="_int">
-		select count(*) from support join users using(u_no) where u_no = #{uNo}
+		select count(*) from SUPPORT join USER using(u_no) where u_no = #{uNo}
 	</select>
 	
 	<select id="selectApplayListUser" resultMap="supportResultSet">
-		select * from support join users using(u_no) where u_no = #{uNo} order by s_status desc
+		select * from SUPPORT join USER using(u_no) where u_no = #{uNo} order by s_status desc
 	</select>
 	
 	<resultMap type="Support" id="supportResultSet">
@@ -41,24 +42,24 @@
 	
 	
 	<select id="supportDetail" resultMap="supportResultSet">
-		select * from support join users using(u_no) where s_no = #{supportNo}
+		select * from SUPPORT join USER using(u_no) where s_no = #{supportNo}
 	</select>
 	
 	<select id="getListCount" resultType="_int">
-		select count(*) from support where s_status = 'Y' and sysdate &lt;= s_end_date 
+		select count(*) from SUPPORT where s_status = 'Y' and CURDATE() &lt;= s_end_date 
 	</select>
 	
 	<select id="selectSupportList" resultMap="supportResultSet">
-	  select * from support join users using(u_no) where s_status = 'Y' and sysdate &lt;= s_end_date order by s_no desc, s_no desc
+	  select * from SUPPORT join USER using(u_no) where s_status = 'Y' and CURDATE() &lt;= s_end_date order by s_no desc, s_no desc
 	</select>
 
 	
 	<select id="getWListCount" resultType="_int">
-		select count(*) from support where s_status = 'W' or s_status = 'N'
+		select count(*) from SUPPORT where s_status = 'W' or s_status = 'N'
 	</select>
 	
 	<select id="selectApplyList" resultMap="supportResultSet">
-		select * from support join users using(u_no) where s_status='W' or s_status ='N' order by s_status desc, s_no desc
+		select * from SUPPORT join USER using(u_no) where s_status='W' or s_status ='N' order by s_status desc, s_no desc
 	</select>
 	
 <!-- 	<select id="getDListCount" resultType="_int"> -->
@@ -66,35 +67,35 @@
 <!-- 	</select> -->
 	
 <!-- 	<select id="selectApplyDevision" resultMap="supportResultSet"> -->
-<!-- 		select * from support join users using(u_no) where s_status= #{devision} order by S_CREATE_DATE desc -->
+<!-- 		select * from support join USER using(u_no) where s_status= #{devision} order by S_CREATE_DATE desc -->
 <!-- 	</select> -->
 	
 	<update id="updateApplyStatus">
-		update support set s_status= #{status} where s_no = #{supportNo}
+		update SUPPORT set s_status= #{status} where s_no = #{supportNo}
 	</update>
 	
 	<select id="getEListCount" resultType="_int">
-		select count(*) from support where s_status = 'Y' and sysdate &gt; s_end_date
+		select count(*) from SUPPORT where s_status = 'Y' and CURDATE() &gt; s_end_date
 	</select>
 	
 	<select id="selectEndSupportList" resultMap="supportResultSet">
-		select * from support join users using(u_no) where (s_status='Y' or s_status ='N') and sysdate &gt; s_end_date order by S_NO desc
+		select * from SUPPORT join USER using(u_no) where (s_status='Y' or s_status ='N') and CURDATE() &gt; s_end_date order by S_NO desc
 	</select>
 	
 	<select id="getSearchListCount" resultType="_int">
-		select count(*) from support where s_status = 'Y' and sysdate &lt;= s_end_date and s_title like '%${searchWord}%'
+		select count(*) from SUPPORT where s_status = 'Y' and CURDATE() &lt;= s_end_date and s_title like '%${searchWord}%'
 	</select>
 	
 	<select id="selectSearchListAdmin" resultMap="supportResultSet">
-		select * from support join users using(u_no) where s_status='Y' and sysdate &lt;= s_end_date and s_title like '%${searchWord}%' order by S_No desc
+		select * from SUPPORT join USER using(u_no) where s_status='Y' and CURDATE() &lt;= s_end_date and s_title like '%${searchWord}%' order by S_No desc
 	</select>
 	
 	<select id="getSupporterListCount" resultType="_int">
-		select count(*) from s_history left join support using(s_no) where s_no = #{supportNo}
+		select count(*) from S_HISTORY left join SUPPORT using(s_no) where s_no = #{supportNo}
 	</select>
 	
 	<select id="selectSupporterListEach" resultMap="supportHistoryResultSet">
-		select * from s_history left join support using(s_no) where s_no = #{supportNo} order by S_HIS_PAYDATE desc
+		select * from S_HISTORY left join SUPPORT using(s_no) where s_no = #{supportNo} order by S_HIS_PAYDATE desc
 	</select>
 	
 	<resultMap type="SupportHistory" id="supportHistoryResultSet">
@@ -103,7 +104,7 @@
 		<result column="S_NO" property="supportNo" />
 		<result column="S_HIS_NAME" property="supporterName" />
 		<result column="S_HIS_AMOUNT" property="supportAmount" />
-		<result column="S_HIS_PAYDATE" property="payDate" />
+		<result column="S_HIS_PAYDATE" property="payDateTime" />
 		<result column="S_HIS_PAYTYPE" property="payType" />
 		<result column="S_HIS_TYPE" property="supporterType" />
 		<result column="S_title" property="supportTitle" />
@@ -111,24 +112,24 @@
 	</resultMap>
 	
 	<select id="getSupporterListAllCount" resultType="_int">
-		select count(*) from s_history left join support using(s_no)
+		select count(*) from S_HISTORY left join SUPPORT using(s_no)
 	</select>
 	
 	<select id="selectSupporterList" resultMap="supportHistoryResultSet">
-		select * from s_history left join support using(s_no) order by S_HIS_PAYDATE desc
+		select * from S_HISTORY left join SUPPORT using(s_no) order by S_HIS_PAYDATE desc
 	</select>
 	
 	
 	<select id="getMListCount" resultType="_int">
-		select count(*) from s_history sh left join support using(s_no) where sh.u_no = #{uNo}
+		select count(*) from S_HISTORY sh left join SUPPORT using(s_no) where sh.u_no = #{uNo}
 	</select>
 	
 	<select id="selectMySupportList" resultMap="supportHistoryResultSet">
-		select * from s_history sh left join support using(s_no) where sh.u_no = #{uNo} order by s_his_paydate desc
+		select * from S_HISTORY sh left join SUPPORT using(s_no) where sh.u_no = #{uNo} order by s_his_paydate desc
 	</select>
 	
 	<select id="getsearchApplyListCount" resultType="_int">
-		select count(*) from support where u_no= #{userNo}
+		select count(*) from SUPPORT where u_no= #{userNo}
 		<if test="supportTitle != 'searchNone'">
 		and S_TITLE like '%${supportTitle}%'
 		</if> 
@@ -141,7 +142,7 @@
 	</select>
 	
 	<select id="selectApplySearchList" resultMap="supportResultSet">
-		select * from support where u_no= #{userNo}
+		select * from SUPPORT where u_no= #{userNo}
 		<if test="supportTitle != 'searchNone'">
 		and S_TITLE like '%${supportTitle}%'
 		</if> 
@@ -155,26 +156,27 @@
 	</select>
 	
 	<insert id="insertSupporter">
-		insert into s_history values(seq_shid.nextval, #{userNo}, #{supportNo}, #{supporterName}, #{supportAmount}, sysdate, #{payType}, #{supporterType})
+		insert into S_HISTORY(U_NO, S_NO, S_HIS_NAME, S_HIS_AMOUNT, S_HIS_PAYDATE, S_HIS_PAYTYPE, S_HIS_TYPE)
+		values(#{userNo}, #{supportNo}, #{supporterName}, #{supportAmount}, default, #{payType}, #{supporterType})
 	</insert>
 	
 	<select id="getSearchMyListCount" resultType="_int">
-		select count(*) from s_history sh left join support using(s_no) where sh.u_no = #{userNo} and s_title like '%${supportTitle}%'
+		select count(*) from S_HISTORY sh left join SUPPORT using(s_no) where sh.u_no = #{userNo} and s_title like '%${supportTitle}%'
 	</select>
 	
 	<select id="searchMyList" resultMap="supportHistoryResultSet">
-		select * from s_history sh left join support using(s_no) where sh.u_no = #{userNo} and s_title like '%${supportTitle}%' order by s_no desc
+		select * from S_HISTORY sh left join SUPPORT using(s_no) where sh.u_no = #{userNo} and s_title like '%${supportTitle}%' order by s_no desc
 	</select>
 	
 	<select id="searchEListCount" resultType="_int">
-		select count(*) from support where s_status = 'Y' and sysdate &gt; s_end_date and s_title like '%${supportTitle}%'
+		select count(*) from SUPPORT where s_status = 'Y' and CURDATE() &gt; s_end_date and s_title like '%${supportTitle}%'
 	</select>
 	<select id="selectSearchEndList" resultMap="supportResultSet">
-		select * from support join users using(u_no) where (s_status='Y' or s_status ='N') and sysdate &gt; s_end_date and s_title like '%${supportTitle}%' order by S_No desc
+		select * from SUPPORT join USER using(u_no) where (s_status='Y' or s_status ='N') and CURDATE() &gt; s_end_date and s_title like '%${supportTitle}%' order by S_No desc
 	</select>
 	
 	<select id="getCategoryCount" resultType="_int">
-		select count(*) from support join users using(u_no) where sysdate &lt;= s_end_date and S_STATUS ='Y'
+		select count(*) from SUPPORT join USER using(u_no) where CURDATE() &lt;= s_end_date and S_STATUS ='Y'
 		<if test="supportTitle == null">
 			and s_category = #{supportCategory}
 		</if>
@@ -185,7 +187,7 @@
 	</select>
 	
 	<select id="selectCategoryListAdmin" resultMap="supportResultSet">
-		select * from support join users using(u_no) where sysdate &lt;= s_end_date and S_STATUS ='Y'
+		select * from SUPPORT join USER using(u_no) where CURDATE() &lt;= s_end_date and S_STATUS ='Y'
 		<if test="supportTitle == null">
 			and s_category = #{supportCategory}
 		</if>
@@ -196,11 +198,11 @@
 	</select>
 	
 	<update id="updateFundAmount">
-		update support set FUND_AMOUNT = FUND_AMOUNT + #{supportAmount}, S_COUNT = S_COUNT +1 where s_no = #{supportNo}
+		update SUPPORT set FUND_AMOUNT = FUND_AMOUNT + #{supportAmount}, S_COUNT = S_COUNT +1 where s_no = #{supportNo}
 	</update>
 	
 	<select id="getMyListCount" resultType="_int">
-		select count(*) from s_history sh left join support using(s_no) where sh.u_no = #{userNo}
+		select count(*) from S_HISTORY sh left join SUPPORT using(s_no) where sh.u_no = #{userNo}
 		<if test="supportTitle == null">
 			and s_category = #{category}
 		</if>
@@ -209,7 +211,7 @@
 		</if>
 	</select>
 	<select id="cateMySupportList" resultMap="supportHistoryResultSet">
-		select * from s_history sh left join support using(s_no) where sh.u_no = #{userNo}
+		select * from S_HISTORY sh left join SUPPORT using(s_no) where sh.u_no = #{userNo}
 		<if test="supportTitle == null">
 			and s_category = #{category}
 		</if>
@@ -220,26 +222,32 @@
 	</select>
 	
 	<select id="getDday" resultType="_int">
-		select ceil(S_END_DATE - sysdate) from support where s_no = #{supportNo}
+		select ceil(S_END_DATE - CURDATE()) from SUPPORT where s_no = #{supportNo}
 	</select>
 	
 	<select id="maintotalCount" resultType="string">
-		SELECT count(*) FROM s_history WHERE TRUNC(s_his_paydate) = TRUNC(sysdate)
-	</select>
-	<select id="maintotalAmount" resultType="string">
-		SELECT SUM(s_his_amount) FROM s_history WHERE TRUNC(s_his_paydate) = TRUNC(sysdate)
+		SELECT count(*) FROM S_HISTORY WHERE DATE(s_his_paydate) = CURDATE()
 	</select>
 	
+	<select id="maintotalAmount" resultType="string">
+	    SELECT SUM(s_his_amount) FROM S_HISTORY WHERE DATE(s_his_paydate) = CURDATE()
+	</select>
+
+	
 	<select id="currentSupporter" resultMap="supportHistoryResultSet">
-		select *
-		from(select *
-    		from s_history where s_no=#{supportNo}
-   			 order by s_his_paydate desc)
-		where rownum &lt; =3 
+	    SELECT subquery.S_HIS_NO, subquery.U_NO, subquery.S_NO, subquery.S_HIS_NAME, subquery.S_HIS_AMOUNT, DATE_FORMAT(subquery.S_HIS_PAYDATE, '%y-%m-%d (%a) %H:%i:%s') AS "S_HIS_PAYDATE", subquery.S_HIS_PAYTYPE,
+	    		subquery.S_HIS_TYPE
+	    FROM (
+	        SELECT *
+	        FROM S_HISTORY s
+	        WHERE s.s_no = #{supportNo}
+	        ORDER BY s.s_his_paydate DESC
+	        LIMIT 3
+	    ) AS subquery
 	</select>
 	
 	<select id="getCateEndListCount" resultType="_int">
-		select count(*) from support where sysdate &gt;= s_end_date and S_STATUS ='Y'
+		select count(*) from SUPPORT where CURDATE() &gt;= s_end_date and S_STATUS ='Y'
 		<if test="supportTitle == null">
 			and s_category = #{supportCategory}
 		</if>
@@ -250,7 +258,7 @@
 	</select>
 	
 	<select id="cateEndSupportList" resultMap="supportResultSet">
-		select * from support where sysdate &gt;= s_end_date and S_STATUS ='Y'
+		select * from SUPPORT where CURDATE() &gt;= s_end_date and S_STATUS ='Y'
 		<if test="supportTitle == null">
 			and s_category = #{supportCategory}
 		</if>
@@ -261,7 +269,7 @@
 	</select>
 	
 	<select id="getApplyListAdmin" resultType="_int">
-		select count(*) from support where S_status != 'Y'
+		select count(*) from SUPPORT where S_status != 'Y'
 		<if test="supportTitle != 'searchNone'">
 		and S_TITLE like '%${supportTitle}%'
 		</if> 
@@ -274,7 +282,7 @@
 	</select>
 	
 	<select id="applyListAdmin" resultMap="supportResultSet">
-		select * from support where S_status != 'Y'
+		select * from SUPPORT where S_status != 'Y'
 		<if test="supportTitle != 'searchNone'">
 		and S_TITLE like '%${supportTitle}%'
 		</if> 
@@ -288,12 +296,12 @@
 	</select>
 	
 	<update id="updateSupport">
-	 update support set s_category=#{supportCategory}, s_title=#{supportTitle}, s_start_date =#{startDate}, s_end_date=#{endDate}, target_amount=#{targetAmount}, s_content=#{supportContent}, image_url = #{imageUrl}
+	 update SUPPORT set s_category=#{supportCategory}, s_title=#{supportTitle}, s_start_date =#{startDate}, s_end_date=#{endDate}, target_amount=#{targetAmount}, s_content=#{supportContent}, image_url = #{imageUrl}
 	 where s_no =#{supportNo}
 	</update>
 	
 <update id="updateStartDate">
-		update support set S_START_DATE=sysdate where s_no = #{supportNo}
+		update SUPPORT set S_START_DATE=default where s_no = #{supportNo}
 	</update>
 	
 </mapper>

@@ -178,7 +178,7 @@
 	            <tbody>
 	            
 	            		<tr th:if="${sList.isEmpty}">
-			                	<td colspan="7">신청된 후원이 없습니다.</td>
+			                	<td colspan="7" style="pointer-events: none;">신청된 후원이 없습니다.</td>
 			            <tr>
 		                <tr th:each="s : ${sList}" th:if="${ sList != null }">
 		                    <td th:text="${s.supportNo}"></td>

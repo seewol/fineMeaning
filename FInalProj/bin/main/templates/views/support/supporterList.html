@@ -59,11 +59,11 @@
 					    		</script>
 		                    </td>
 		                    <td th:text="${s.payType}"></td>
-		                    <td th:text="${s.payDate}"></td>
+		                    <td th:text="${s.payDateTime}"></td>
 		                    <input type="hidden" th:value="${s.supportNo}">
 		                </tr>
 			                <tr th:if="${shList.isEmpty}">
-			                	<td colspan="7">아직 후원자가 없습니다.</td>
+			                	<td colspan="7" style="pointer-events: none;">아직 후원자가 없습니다.</td>
 			                <tr>
 		                <script th:inline="javascript">
 		                	/*<![CDATA[*/

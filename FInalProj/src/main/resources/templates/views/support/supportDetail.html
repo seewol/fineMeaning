@@ -203,7 +203,7 @@ body img{
                     <div class="supportSubTitle">참여 내역</div>
 					
 					<th:block th:if="${shList != null}" th:each="shList :${shList}">
-	                    <div class="supportDate" th:text="${#dates.format(shList.payDate, 'yyyy.MM.dd HH:mm:ss')}"></div>
+	                    <div class="supportDate" th:text="${shList.payDateTime}"></div>
 	                    <th:block th:if="${shList.supporterType =='익명'}">
 		                    <div class="sponsor" th:text="'숨은 천사 ' + ${shList.supportAmount} + '원 참여'"  >
 		                    </div>
@@ -214,7 +214,7 @@ body img{
 		                </th:block>
 		             </th:block>
 		             <th:block th:if="${shList.isEmpty}">
-		             	<div class="noOne">아직 아무도 참여하지 않았습니다.</div>
+		             	<div class="noOne" style="pointer-events: none;">아직 아무도 참여하지 않았습니다.</div>
 		             </th:block>
 		             
                     <br><br><br>

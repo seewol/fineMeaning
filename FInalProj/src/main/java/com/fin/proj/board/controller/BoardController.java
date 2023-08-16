@@ -478,6 +478,8 @@ public class BoardController {
 		b.setuNo(uNo);
 		b.setBoardType("결실");
 		
+		System.out.println(b);
+		
 		int result = bService.insertBoardWithCategory(b);
 		
 		if(result > 0) {

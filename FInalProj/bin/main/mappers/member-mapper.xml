@@ -4,7 +4,7 @@
 	
 	<select id="login" resultMap="memberResultSet">
 		select *
-		from users
+		from USER
 		where u_id = #{uId} and u_status = 'Y'
 	</select>
 	
@@ -28,38 +28,38 @@
 	</resultMap>
 	
 	<insert id="insertUser">
-		insert into users
-		values(seq_uid.nextval, #{uId}, #{uPwd}, #{uName}, #{residentNo}, #{address}, #{phone}, #{email},
-				#{uNickName}, default, null, default, #{uType}, #{registrar}, sysdate, default)
+		insert into USER(U_ID, U_PWD, U_NAME, RESIDENT_NO, ADDRESS, PHONE, EMAIL, U_NICKNAME, LOGIN_TYPE, KAKAO_ID, U_STATUS, U_TYPE, REGISTRAR, ENROLL_DATE, IS_ADMIN)
+		values(#{uId}, #{uPwd}, #{uName}, #{residentNo}, #{address}, #{phone}, #{email},
+				#{uNickName}, default, null, default, #{uType}, #{registrar}, default, default)
 	</insert>
 	
 	<select id="checkId" resultType="_int">
 		select count(*)
-		from users
+		from USER
 		where u_id = #{uId}
 	</select>
 	
 	<select id="checkLogin" resultType="_int">
 		select count(*)
-		from users
+		from USER
 		where u_id = #{uId} and u_status = 'Y'
 	</select>
 	
 	<select id="checkNickName" resultType="_int">
 		select count(*)
-		from users
+		from USER
 		where u_NickName = #{uNickName}
 	</select>
 	
 	<update id="updateMyInfo">
-		update users
+		update USER
 		set u_name = #{uName}, u_type = #{uType}, registrar = #{registrar}, address = #{address, jdbcType=VARCHAR},
 		    phone = #{phone, jdbcType=VARCHAR}, email = #{email, jdbcType=VARCHAR}, u_nickname = #{uNickName}
 		where u_no = #{uNo}
 	</update>
 	
 	<update id="deleteUser">
-		update users
+		update USER
 		set u_status = 'N'
 		where u_no = #{uNo}
 	</update>
@@ -67,85 +67,85 @@
 	<select id="checkNickNameModify" resultType="_int">
 	<![CDATA[
 		select count(*)
-		from users
+		from USER
 		where u_nickname = #{uNickName} AND u_no <> #{uNo}
 	]]>
 	</select>
 	
 	<update id="updatePwd">
-		update users
+		update USER
 		set u_pwd = #{newPwd}
 		where u_id = #{uId}
 	</update>
 	
 	<select id="selectPwd" resultMap="memberResultSet">
 		select u_pwd
-		from users
+		from USER
 		where u_id = #{uId}
 	</select>
 	
 	<select id="searchEmailUser" resultType="_int">
 		select count(*)
-		from users
+		from USER
 		where u_name = #{uName} and email = #{email} and u_status = 'Y' and login_type = '일반'
 	</select>
 	
 	<select id="searchUser" resultMap="memberResultSet">
 		select *
-		from users
+		from USER
 		where (u_name = #{uName} and email = #{email} and u_status = 'Y' and login_type = '일반') or (u_name = #{uName} and phone = #{phone} and u_status = 'Y' and login_type = '일반')
 	</select>
 	
 	<select id="searchEmailUser2" resultType="_int">
 		select count(*)
-		from users
+		from USER
 		where u_id = #{uId} and email = #{email} and u_status = 'Y' and login_type = '일반'
 	</select>
 	
 	<select id="searchUserPwd" resultMap="memberResultSet">
 		select *
-		from users
+		from USER
 		where (u_id = #{uId} and email = #{email} and u_status = 'Y' and login_type = '일반') or (u_id = #{uId} and phone = #{phone} and u_status = 'Y' and login_type = '일반')
 	</select>
 	
 	<select id="searchPhoneUser" resultType="_int">
 		select count(*)
-		from users
+		from USER
 		where u_name = #{uName} and phone = #{phone} and u_status = 'Y' and login_type = '일반'
 	</select>
 	
 	<select id="searchPhoneUser2" resultType="_int">
 		select count(*)
-		from users
+		from USER
 		where u_id = #{uId} and phone = #{phone} and u_status = 'Y' and login_type = '일반'
 	</select>
 	
 	<select id="getListCount" resultType="_int">
 		select count(*)
-		from users
+		from USER
 	</select>
 	
 	<select id="selectUserList" resultMap="memberResultSet">
 	  select *
-	  from users
+	  from USER
 	  order by u_no desc
 	</select>
 	
 	<select id="getUserListCount" resultType="_int">
 		select count(*)
-		from users
+		from USER
 		where u_no = #{uNo}
 	</select>
 	
 	<select id="selectUserListEach" resultMap="memberResultSet">
 		select *
-		from users
+		from USER
 		where u_no = #{uNo}
 	</select>
 	
 	<select id="statusUserList" resultMap="memberResultSet">
 		select *
-		from users
+		from USER
 		where u_status = 'Y'
 		order by u_no desc	
 	</select>
@@ -153,14 +153,14 @@
 	<select id="getCategoryCount" resultType="_int">
 		<if test="category == '전체'">
 			select count(*)
-			from users
+			from USER
 			<if test="searchWord != null and searchWord != ''">
 			where u_id like '%${searchWord}%'
 			</if>
 		</if>
 		<if test="category == '활동중인 회원'">
 			select count(*)
-			from users
+			from USER
 			where u_status = 'Y'
 			<if test="searchWord != null and searchWord != ''">
 			and u_id like '%${searchWord}%'
@@ -168,7 +168,7 @@
 		</if>
 		<if test="category == '관리자인 회원'">
 			select count(*)
-			from users
+			from USER
 			where (is_admin = '0' or is_admin = '2')
 			<if test="searchWord != null and searchWord != ''">
 			and u_id like '%${searchWord}%'
@@ -176,7 +176,7 @@
 		</if>
 		<if test="category == '미승인 기관'">
 			select count(*)
-			from users
+			from USER
 			where (u_type = '단체' and is_admin = '1')
 			<if test="searchWord != null and searchWord != ''">
 			and u_id like '%${searchWord}%'
@@ -187,7 +187,7 @@
 	<select id="selectCategoryListAdmin" resultMap="memberResultSet">
 		<if test="category == '전체'">
 			select *
-			from users
+			from USER
 			<if test="searchWord != null and searchWord != ''">
 			where u_id like '%${searchWord}%'
 			</if>
@@ -195,7 +195,7 @@
 		</if>
 		<if test="category == '활동중인 회원'">
 			select *
-			from users
+			from USER
 			where u_status = 'Y'
 			<if test="searchWord != null and searchWord != ''">
 			and u_id like '%${searchWord}%'
@@ -204,7 +204,7 @@
 		</if>
 		<if test="category == '관리자인 회원'">
 			select *
-			from users
+			from USER
 			where (is_admin = '0' or is_admin = '2')
 			<if test="searchWord != null and searchWord != ''">
 			and u_id like '%${searchWord}%'
@@ -213,7 +213,7 @@
 		</if>
 		<if test="category == '미승인 기관'">
 			select *
-			from users
+			from USER
 			where (u_type = '단체' and is_admin = '1')
 			<if test="searchWord != null and searchWord != ''">
 			and u_id like '%${searchWord}%'
@@ -224,36 +224,36 @@
 	
 	<select id="kakaoLogin" resultMap="memberResultSet">
 		select *
-		from users
+		from USER
 		where kakao_id = #{kakaoId} and u_status = 'Y'
 	</select>
 	
 	<insert id="kakaoEnroll">
-		insert into users
-		values(seq_uid.nextval, null, null, #{uName}, #{residentNo}, null, null, #{email},
-				#{uNickName}, '카카오', #{kakaoId}, default, #{uType}, #{registrar}, sysdate, default)
+		insert into USER(U_ID, U_PWD, U_NAME, RESIDENT_NO, ADDRESS, PHONE, EMAIL, U_NICKNAME, LOGIN_TYPE, KAKAO_ID, U_STATUS, U_TYPE, REGISTRAR, ENROLL_DATE, IS_ADMIN)
+		values(null, null, #{uName}, #{residentNo}, null, null, #{email},
+				#{uNickName}, '카카오', #{kakaoId}, default, #{uType}, #{registrar}, default, default)
 	</insert>
 	
 	<select id="checkEmail" resultType="_int">
 		select count(*)
-		from users
+		from USER
 		where email = #{emailAddress} and u_status = 'Y' and login_type = '일반'
 	</select>
 	
-	<select id="getSearchListCount" resultType="_int">
+	<select id="getSearchListCount">
 		select count(*)
-		from users
+		from USER
 		where u_id like '%${searchWord}%'
 	</select>
 	
 	<select id="selectSearchListAdmin" resultMap="memberResultSet">
 		select *
-		from users
+		from USER
 		where u_id like '%${searchWord}%'
 	</select>
 	
 	<update id="updateUserInfo">
-		update users
+		update USER
 		set ${column} = #{data}
 		<if test="column == 'u_type' and data == '일반'">
 		, registrar = null
@@ -262,7 +262,7 @@
 	</update>
 	
 	<update id="updateState">
-		update users
+		update USER
 		set u_status = #{status}
 		where u_no = #{uNo} 
 	</update>
