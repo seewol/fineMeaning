@@ -77,45 +77,84 @@
 		where board_no = #{bId}
 	</update>
 	
+<!-- 	<select id="searchListCount" resultType="_int"> -->
+<!-- 	  SELECT COUNT(*) -->
+<!-- 	  FROM BOARD -->
+<!-- 	  WHERE board_title like '%' || #{keyword} || '%' and board_type = #{i} and board_status='Y' -->
+<!-- 	  <if test="category != null and category != 0"> -->
+<!-- 	    and board_cate = #{category} -->
+<!-- 	  </if> -->
+<!-- 	</select>  -->
+	
+<!-- 	<select id="searchByTitleAndCategory" parameterType="map" resultMap="boardResultSet"> -->
+<!-- 		select * -->
+<!-- 		from BOARD -->
+<!-- 			 join USER using(u_no) -->
+<!-- 		WHERE BOARD_TITLE like '%' || #{keyword} || '%' and BOARD_TYPE = #{i} and BOARD_STATUS = 'Y' -->
+<!-- 		<if test="category != null and category != 0"> -->
+<!-- 	   		and BOARD_CATE = #{category} -->
+<!-- 		</if> -->
+<!-- 		order by BOARD_NO desc -->
+<!-- 	</select> -->
+	
+	
+	<!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ 여기부터 수정 ★★★★★★★★★★ -->
+	
 	<select id="searchListCount" resultType="_int">
-	  SELECT COUNT(*)
-	  FROM BOARD
-	  WHERE board_title like '%' || #{keyword} || '%' and board_type = #{i} and board_status='Y'
-	  <if test="category != null and category != 0">
-	    and board_cate = #{category}
-	  </if>
+		SELECT COUNT(*)
+	  	FROM BOARD
+	  	WHERE board_type = #{i} and board_status='Y'
+		<if test="keyword != null and keyword != ''">
+			AND BOARD_TITLE LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="category != null and category != 0">
+	    	and BOARD_CATE = #{category}
+	  	</if>
 	</select>
 	
 	<select id="searchByTitleAndCategory" parameterType="map" resultMap="boardResultSet">
-		select *
-		from BOARD
-			 join USER using(u_no)
-		WHERE board_title like '%' || #{keyword} || '%' and board_type = #{i} and board_status='Y'
-		<if test="category != null and category != 0">
-	    and board_cate = #{category}
-		</if>
-		order by board_no desc
+   		select *
+   		from BOARD
+    		join USER using(u_no)
+    	WHERE BOARD_TYPE = #{i} and BOARD_STATUS = 'Y'
+    	<if test="keyword != null and keyword != ''">
+        	and LOWER(BOARD_TITLE) LIKE CONCAT('%', LOWER(#{keyword}), '%')
+    	</if>
+    	<if test="category != null and category != 0">
+        	and BOARD_CATE = #{category}
+    	</if>
+    	order by BOARD_NO desc
 	</select>
+	
 	
 	<select id="searchByTitle" resultMap="boardResultSet">
 		select *
 		from BOARD
-			 join USER using(u_no)
-		where board_title like '%' || #{keyword} || '%' and board_type = #{i} and board_status = 'Y'
+			join USER using(u_no)
+		where board_type = #{i} and board_status = 'Y'
+		<if test="keyword != null and keyword != ''">
+			and LOWER(BOARD_TITLE) LIKE CONCAT('%', LOWER(#{keyword}), '%')
+		</if>
 		order by board_no desc
 	</select>
 	
 	<select id="searchByFpName" resultMap="boardResultSet">
 		select *
 		from BOARD
-		where fp_name like '%' || #{keyword} || '%' and board_type = #{i} and board_status = 'Y'
+		where board_type = #{i} and board_status = 'Y'
+		<if test="keyword != null and keyword != ''">
+			and LOWER(FP_NAME) LIKE CONCAT('%', LOWER(#{keyword}), '%')
+		</if>
 		order by board_no desc
 	</select>
 	
 	<select id="finePeopleCount" resultType="_int">
 		select count(*)
 		from BOARD
-		where fp_name like '%' || #{keyword} || '%' and board_type = #{i} and board_status = 'Y'
+		where board_type = #{i} and board_status = 'Y'
+		<if test="keyword != null and keyword != ''">
+			and LOWER(FP_NAME) LIKE CONCAT('%', LOWER(#{keyword}), '%')
+		</if>
 	</select>
 	
 	<select id="selectReply" resultMap="replyResultSet">

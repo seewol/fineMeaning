@@ -72,8 +72,14 @@ public class BoardController {
 				map.put("category", category);
 			}
 			listCount = bService.searchListCount(map);
+//			System.out.println(listCount);
+//			System.out.println(map);
+			
 			pageInfo = Pagination.getPageInfo(currentPage, listCount, 10);
 			list = bService.searchByTitleAndCategory(pageInfo, map);
+			
+//			System.out.println(list);
+			
 		} else {
 			listCount = bService.getListCount("자주 묻는 질문");
 			pageInfo = Pagination.getPageInfo(currentPage, listCount, 10);
@@ -312,6 +318,9 @@ public class BoardController {
 			listCount = bService.finePeopleCount(map);
 			pageInfo = Pagination.getPageInfo(currentPage, listCount, 10);
 			list = bService.searchByFpName(pageInfo, map);
+//			System.out.println(map);
+//			System.out.println(listCount);
+//			System.out.println(list);
 		} else {
 			listCount = bService.getListCount("선뜻한 사람");
 			pageInfo = Pagination.getPageInfo(currentPage, listCount, 10);
@@ -658,6 +667,9 @@ public class BoardController {
 			listCount = bService.searchListCount(map);
 			pageInfo = Pagination.getPageInfo(currentPage, listCount, 10);
 			list = bService.searchByTitle(pageInfo, map);
+//			System.out.println(map);
+//			System.out.println(listCount);
+//			System.out.println(list);
 		} else {
 			listCount = bService.getListCount("선한 뉴스");
 			pageInfo = Pagination.getPageInfo(currentPage, listCount, 10);
