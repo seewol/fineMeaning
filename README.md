@@ -2,6 +2,8 @@
 
 ## 🪴 kh에서 파이널 프로젝트로 진행한 인류애 사이트 '선뜻' 입니다♪
 
+《 MySQL Mygration ver. / AWS RDS 활용 》
+
 [👉🏻게시판 기능 시연 영상 (click!)](https://youtu.be/Sa_cu_iJxGY?si=naEKhJr1HI5XPzKf, "영상 보기")
 
 ### [구현 기능]
