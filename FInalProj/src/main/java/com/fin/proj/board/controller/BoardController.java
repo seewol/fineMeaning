@@ -1,6 +1,7 @@
 package com.fin.proj.board.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Base64.Decoder;
@@ -103,6 +104,13 @@ public class BoardController {
 //		System.out.println(bNo + ", " + writer + ", "+ page);
 		// 상세보기의 경우 조회수 +1, but 내 글 클릭 시 조회수 +0 (로그인 유저 정보 가져와서 비교)
 		// 파라미터로 받은 page를 통해 목록으로 돌아갔을 시 원래 보던 페이지 노출
+		
+		if(writer != null)
+			try {
+				writer = new String(writer.getBytes("8859_1"), "EUC-KR");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 		
 		Member m = (Member)session.getAttribute("loginUser");
 //		System.out.println(m);
