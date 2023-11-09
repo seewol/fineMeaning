@@ -148,7 +148,7 @@ public class BoardController {
 			System.out.println(keyword);
 			System.out.println(category);
 			
-			return "faq_Detail";
+			return "faq_detail";
 		} else {
 			throw new BoardException("게시글 상세 조회 실패");
 		}
