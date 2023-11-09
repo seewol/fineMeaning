@@ -105,12 +105,15 @@ public class BoardController {
 		// 상세보기의 경우 조회수 +1, but 내 글 클릭 시 조회수 +0 (로그인 유저 정보 가져와서 비교)
 		// 파라미터로 받은 page를 통해 목록으로 돌아갔을 시 원래 보던 페이지 노출
 		
-		if(writer != null)
+		if(writer != null) {
 			try {
 				writer = new String(writer.getBytes("8859_1"), "EUC-KR");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}
+		}
+		
+		System.out.println(writer);
 		
 		Member m = (Member)session.getAttribute("loginUser");
 //		System.out.println(m);
@@ -140,6 +143,11 @@ public class BoardController {
 			if(category != null) {
 				model.addAttribute("category", category);
 			}
+			System.out.println(board.getBoardNo());
+			System.out.println(page);
+			System.out.println(keyword);
+			System.out.println(category);
+			
 			return "faq_Detail";
 		} else {
 			throw new BoardException("게시글 상세 조회 실패");
