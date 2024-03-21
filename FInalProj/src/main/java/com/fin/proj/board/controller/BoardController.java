@@ -110,7 +110,7 @@ public class BoardController {
 		
 		try {
             decodedWriter = URLDecoder.decode(writer, "UTF-8");
-            System.out.println(decodedWriter);  // 출력: 지은
+            System.out.println(decodedWriter);  // 출력: 닉네임
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
